@@ -685,6 +685,18 @@
   text-underline-offset: 0.25rem;
 }
 
+.site-footer__whatsapp {
+  display: flex;
+  width: fit-content;
+  gap: 0.65rem;
+  padding: 0.75rem 0;
+  font-size: 0.62rem;
+}
+
+.site-footer__whatsapp:hover {
+  gap: 0.9rem;
+}
+
 .site-footer__nav {
   display: flex;
   flex-wrap: wrap;
