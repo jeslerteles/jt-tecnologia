@@ -79,7 +79,7 @@ um único Canvas persistente que reutiliza a cena do laboratório:
 - A metodologia recebe um pulso sequencial na linha e nos seis nós; diagramas
   SVG em Treinamentos e Experiência usam fluxos leves em CSS, sem outro Canvas.
 - O movimento decorativo é desativado com `prefers-reduced-motion`. O endereço
-  público continua sendo `contato@jttecnologia.com`.
+  público continua sendo `contato@jt-tecnologia.com`.
 
 ## Formulário de contato (Formspree)
 

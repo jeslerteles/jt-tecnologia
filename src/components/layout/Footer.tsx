@@ -8,8 +8,8 @@ function Footer() {
       <div className="site-footer__brand">
         <a href="#inicio">JT TECNOLOGIA</a>
         <p>Especialização em soluções tecnológicas para logística.</p>
-        <a className="site-footer__email" href="mailto:contato@jttecnologia.com">
-          contato@jttecnologia.com
+        <a className="site-footer__email" href="mailto:contato@jt-tecnologia.com">
+          contato@jt-tecnologia.com
         </a>
       </div>
       <nav className="site-footer__nav" aria-label="Navegação do rodapé">
