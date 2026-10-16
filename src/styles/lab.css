@@ -1,0 +1,185 @@
+.lab {
+  --lab-accent: #ff9f1c;
+
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #050a10;
+  color: #e9edf2;
+}
+
+.lab[data-mode="digital"] {
+  --lab-accent: #39bce0;
+}
+
+.lab__viewport {
+  position: absolute;
+  inset: 0;
+}
+
+.lab__viewport canvas {
+  display: block;
+}
+
+.lab__status {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  background: radial-gradient(ellipse at 50% 45%, #0b1928, #050a10 70%);
+}
+
+.lab__status p {
+  margin: 0;
+  padding: 0 1.5rem;
+  color: rgb(233 237 242 / 60%);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.lab__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgb(5 10 16 / 72%) 0%, transparent 22%),
+    linear-gradient(0deg, rgb(5 10 16 / 78%) 0%, transparent 24%),
+    radial-gradient(ellipse at center, transparent 52%, rgb(5 10 16 / 72%) 100%);
+}
+
+.lab__header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1.1rem, 3vw, 2rem) clamp(1.1rem, 4vw, 2.5rem);
+  pointer-events: none;
+}
+
+.lab__identity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+}
+
+.lab__mark {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--lab-accent);
+  box-shadow: 0 0 0.9rem var(--lab-accent);
+  transition:
+    background-color 0.6s ease,
+    box-shadow 0.6s ease;
+}
+
+.lab__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid rgb(233 237 242 / 16%);
+  background: rgb(11 25 40 / 55%);
+  backdrop-filter: blur(8px);
+  color: rgb(233 237 242 / 82%);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  pointer-events: auto;
+  transition:
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.lab__back:hover {
+  border-color: var(--lab-accent);
+  color: #e9edf2;
+}
+
+.lab__controls {
+  position: absolute;
+  bottom: clamp(1.5rem, 5vh, 3rem);
+  left: 50%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0.25rem;
+  border: 1px solid rgb(233 237 242 / 14%);
+  background: rgb(11 25 40 / 62%);
+  backdrop-filter: blur(10px);
+  transform: translateX(-50%);
+}
+
+.lab__indicator {
+  position: absolute;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: 0.25rem;
+  width: calc(50% - 0.25rem);
+  border: 1px solid var(--lab-accent);
+  background: color-mix(in srgb, var(--lab-accent) 12%, transparent);
+  transition:
+    transform 0.6s cubic-bezier(0.65, 0, 0.35, 1),
+    border-color 0.6s ease,
+    background-color 0.6s ease;
+}
+
+.lab[data-mode="digital"] .lab__indicator {
+  transform: translateX(100%);
+}
+
+.lab__mode {
+  position: relative;
+  min-width: 7.5rem;
+  padding: 0.75rem 1.4rem;
+  border: 0;
+  background: transparent;
+  color: rgb(233 237 242 / 58%);
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.lab__mode[aria-pressed="true"] {
+  color: #e9edf2;
+}
+
+.lab__mode:hover {
+  color: #e9edf2;
+}
+
+.lab__back:focus-visible,
+.lab__mode:focus-visible {
+  outline: 2px solid var(--lab-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 520px) {
+  .lab__identity {
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+  }
+
+  .lab__mode {
+    min-width: 6.25rem;
+    padding-inline: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab__indicator,
+  .lab__mark {
+    transition-duration: 0.01ms;
+  }
+}
