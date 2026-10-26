@@ -4,13 +4,9 @@ import { ArrowLeft } from 'lucide-react'
 import ThreeScene from '../components/three/ThreeScene'
 import type { ViewMode } from '../components/three/warehouse/constants'
 import WarehouseScene from '../components/three/warehouse/WarehouseScene'
+import { useLanguage } from '../lib/useLanguage'
 import { HOME_PATH, navigate } from '../lib/navigation'
 import '../styles/lab.css'
-
-const MODES: { id: ViewMode; label: string }[] = [
-  { id: 'physical', label: 'Physical' },
-  { id: 'digital', label: 'Digital' },
-]
 
 function LabStatus({ message }: { message: string }) {
   return (
@@ -22,6 +18,7 @@ function LabStatus({ message }: { message: string }) {
 
 function Lab3DPage() {
   const [mode, setMode] = useState<ViewMode>('physical')
+  const { language, setLanguage, copy } = useLanguage()
 
   useEffect(() => {
     const previousTitle = document.title
@@ -44,9 +41,9 @@ function Lab3DPage() {
       <div className="lab__viewport">
         <ThreeScene
           reducedMotion="static"
-          loadingFallback={<LabStatus message="Carregando ambiente 3D…" />}
+          loadingFallback={<LabStatus message={copy.lab.loading} />}
           fallback={
-            <LabStatus message="Não foi possível iniciar o ambiente 3D neste dispositivo." />
+            <LabStatus message={copy.lab.unavailable} />
           }
         >
           <WarehouseScene mode={mode} />
@@ -63,13 +60,26 @@ function Lab3DPage() {
 
         <a className="lab__back" href={HOME_PATH} onClick={handleBack}>
           <ArrowLeft size={14} strokeWidth={1.75} aria-hidden="true" />
-          Página inicial
+          {copy.lab.back}
         </a>
+        <div className="language-switch" role="group" aria-label={copy.header.languageLabel}>
+          {(['en', 'es', 'pt'] as const).map((option) => (
+            <button
+              key={option}
+              type="button"
+              aria-label={option === 'en' ? 'English' : option === 'es' ? 'Español' : 'Português do Brasil'}
+              aria-pressed={language === option}
+              onClick={() => setLanguage(option)}
+            >
+              {option.toUpperCase()}
+            </button>
+          ))}
+        </div>
       </header>
 
-      <div className="lab__controls" role="group" aria-label="Modo de visualização">
+      <div className="lab__controls" role="group" aria-label={copy.lab.modeLabel}>
         <span className="lab__indicator" aria-hidden="true" />
-        {MODES.map(({ id, label }) => (
+        {(['physical', 'digital'] as const).map((id, index) => (
           <button
             key={id}
             type="button"
@@ -77,7 +87,7 @@ function Lab3DPage() {
             aria-pressed={mode === id}
             onClick={() => setMode(id)}
           >
-            {label}
+            {copy.lab.modes[index]}
           </button>
         ))}
       </div>

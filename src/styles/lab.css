@@ -105,6 +105,10 @@
   color: #e9edf2;
 }
 
+.lab__header .language-switch {
+  margin-left: 0.5rem;
+}
+
 .lab__controls {
   position: absolute;
   bottom: clamp(1.5rem, 5vh, 3rem);

@@ -38,6 +38,38 @@ button {
   font-family: "DM Sans", sans-serif;
 }
 
+.language-switch {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.2rem;
+  padding: 0.2rem;
+  border: 1px solid rgb(233 237 242 / 14%);
+  border-radius: 2rem;
+}
+
+.language-switch button {
+  min-width: 2rem;
+  padding: 0.35rem 0.45rem;
+  border: 0;
+  border-radius: 1rem;
+  background: transparent;
+  color: rgb(233 237 242 / 58%);
+  cursor: pointer;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.language-switch button[aria-pressed="true"] {
+  background: rgb(57 188 224 / 18%);
+  color: var(--color-data-cyan);
+}
+
+.language-switch button:hover {
+  color: var(--color-text-primary);
+}
+
 #root {
   min-height: 100vh;
 }

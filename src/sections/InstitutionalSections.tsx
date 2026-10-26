@@ -1,17 +1,10 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import {
-  IMPLEMENTATION_STEPS,
-  SUPPORT_CAPABILITIES,
-  TRAINING_ITEMS,
-} from '../lib/content'
+import { useLanguage } from '../lib/useLanguage'
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/meaerybp'
 
-const SEND_ERROR_MESSAGE =
-  'Não foi possível enviar sua mensagem. Tente novamente ou use o e-mail público informado na página.'
-
-async function readFormspreeError(response: Response): Promise<string> {
+async function readFormspreeError(response: Response, fallback: string): Promise<string> {
   try {
     const payload: unknown = await response.json()
     if (typeof payload === 'object' && payload !== null && 'errors' in payload) {
@@ -23,13 +16,13 @@ async function readFormspreeError(response: Response): Promise<string> {
             item !== null &&
             typeof (item as { message?: unknown }).message === 'string',
         )
-        if (first) return `${SEND_ERROR_MESSAGE} (${first.message})`
+        if (first) return `${fallback} (${first.message})`
       }
     }
   } catch {
     // Resposta sem JSON: usa a mensagem padrão.
   }
-  return SEND_ERROR_MESSAGE
+  return fallback
 }
 
 function SectionLabel({ children }: { children: string }) {
@@ -41,17 +34,19 @@ function SectionLabel({ children }: { children: string }) {
 }
 
 function Implementation() {
+  const { copy } = useLanguage()
+
   return (
     <section id="implantacao" className="implementation" aria-labelledby="implementation-title">
       <div className="implementation__intro">
-        <SectionLabel>Implantação / Método</SectionLabel>
+        <SectionLabel>{copy.implementation.eyebrow}</SectionLabel>
         <h2 id="implementation-title" className="editorial-title" data-reveal>
-          DA ESTRATÉGIA
+          {copy.implementation.title[0]}
           <br />
-          À OPERAÇÃO
+          {copy.implementation.title[1]}
         </h2>
         <p className="section-lead" data-reveal>
-          Uma metodologia estruturada para reduzir riscos e assegurar a continuidade operacional.
+          {copy.implementation.lead}
         </p>
       </div>
 
@@ -60,7 +55,7 @@ function Implementation() {
           <span className="process__trace" data-process-trace />
         </span>
         <ol className="process">
-          {IMPLEMENTATION_STEPS.map((step, index) => (
+          {copy.implementation.steps.map((step, index) => (
             <li className="process__step" key={step.title} data-reveal>
               <span className="process__number">{String(index + 1).padStart(2, '0')}</span>
               <div className="process__copy">
@@ -77,6 +72,8 @@ function Implementation() {
 }
 
 function KnowledgeDiagram() {
+  const { copy } = useLanguage()
+
   return (
     <svg
       className="knowledge-diagram"
@@ -84,9 +81,9 @@ function KnowledgeDiagram() {
       role="img"
       aria-labelledby="knowledge-diagram-title knowledge-diagram-desc"
     >
-      <title id="knowledge-diagram-title">Fluxo de conhecimento operacional</title>
+      <title id="knowledge-diagram-title">{copy.training.diagramTitle}</title>
       <desc id="knowledge-diagram-desc">
-        Um núcleo de conhecimento conecta pessoas, processos e tecnologia.
+        {copy.training.diagramDescription}
       </desc>
       <g fill="none" stroke="currentColor" strokeWidth="1">
         <path
@@ -101,10 +98,10 @@ function KnowledgeDiagram() {
         <circle className="knowledge-diagram__node" cx="209" cy="262" r="6" />
       </g>
       <g className="knowledge-diagram__labels">
-        <text x="52" y="57">PESSOAS</text>
-        <text x="290" y="57">PROCESSOS</text>
-        <text x="178" y="290">TECNOLOGIA</text>
-        <text x="178" y="154">CONHECIMENTO</text>
+        <text x="52" y="57">{copy.training.diagramLabels[0]}</text>
+        <text x="290" y="57">{copy.training.diagramLabels[1]}</text>
+        <text x="178" y="290">{copy.training.diagramLabels[2]}</text>
+        <text x="178" y="154">{copy.training.diagramLabels[3]}</text>
       </g>
       <path
         className="knowledge-diagram__signal knowledge-diagram__signal--people"
@@ -123,27 +120,27 @@ function KnowledgeDiagram() {
 }
 
 function Training() {
+  const { copy } = useLanguage()
+
   return (
     <section id="treinamentos" className="training" aria-labelledby="training-title">
       <div className="training__intro">
-        <SectionLabel>Treinamentos / Pessoas &amp; operação</SectionLabel>
+        <SectionLabel>{copy.training.eyebrow}</SectionLabel>
         <h2 id="training-title" className="editorial-title" data-reveal>
-          CONHECIMENTO
+          {copy.training.title[0]}
           <br />
-          QUE SUSTENTA
+          {copy.training.title[1]}
           <br />
-          A OPERAÇÃO
+          {copy.training.title[2]}
         </h2>
         <p className="section-lead" data-reveal>
-          A eficiência de um sistema depende também das pessoas que o utilizam. A JT Tecnologia
-          desenvolve treinamentos direcionados às diferentes funções envolvidas na operação
-          logística.
+          {copy.training.lead}
         </p>
         <KnowledgeDiagram />
       </div>
 
       <ol className="training__list">
-        {TRAINING_ITEMS.map((item, index) => (
+        {copy.training.items.map((item, index) => (
           <li key={item} data-reveal>
             <span>{String(index + 1).padStart(2, '0')}</span>
             <p>{item}</p>
@@ -155,10 +152,12 @@ function Training() {
 }
 
 function SystemGraphic() {
+  const { copy } = useLanguage()
+
   return (
     <div className="system-graphic" aria-hidden="true">
       <div className="system-graphic__column">
-        <span>OPERAÇÃO</span>
+        <span>{copy.support.graphicLabels[0]}</span>
         <i />
       </div>
       <div className="system-graphic__links">
@@ -173,7 +172,7 @@ function SystemGraphic() {
         <i />
       </div>
       <div className="system-graphic__column">
-        <span>SISTEMAS</span>
+        <span>{copy.support.graphicLabels[1]}</span>
         <i />
       </div>
     </div>
@@ -181,22 +180,24 @@ function SystemGraphic() {
 }
 
 function Support() {
+  const { copy } = useLanguage()
+
   return (
     <section id="suporte" className="support" aria-labelledby="support-title">
       <div className="support__intro">
-        <SectionLabel>Suporte / Continuidade</SectionLabel>
+        <SectionLabel>{copy.support.eyebrow}</SectionLabel>
         <h2 id="support-title" className="editorial-title" data-reveal>
-          CONTINUIDADE
+          {copy.support.title[0]}
           <br />
-          OPERACIONAL
+          {copy.support.title[1]}
         </h2>
         <p className="section-lead" data-reveal>
-          Tecnologia, acompanhamento e evolução para manter sua operação em funcionamento.
+          {copy.support.lead}
         </p>
         <SystemGraphic />
       </div>
       <ol className="support__list">
-        {SUPPORT_CAPABILITIES.map((capability, index) => (
+        {copy.support.items.map((capability, index) => (
           <li key={capability} data-reveal>
             <span>{String(index + 1).padStart(2, '0')}</span>
             <h3>{capability}</h3>
@@ -209,16 +210,17 @@ function Support() {
 }
 
 function Clients() {
+  const { copy } = useLanguage()
+
   return (
     <section id="clientes" className="clients" aria-labelledby="clients-title">
       <div className="clients__copy">
-        <SectionLabel>Experiência / Escala</SectionLabel>
+        <SectionLabel>{copy.clients.eyebrow}</SectionLabel>
         <h2 id="clients-title" className="editorial-title" data-reveal>
-          EXPERIÊNCIA EM OPERAÇÕES DE GRANDE ESCALA
+          {copy.clients.title}
         </h2>
         <p className="section-lead" data-reveal>
-          Experiência em projetos e implantações de sistemas para operações logísticas de empresas
-          multinacionais.
+          {copy.clients.lead}
         </p>
       </div>
       <ConnectivityNetwork />
@@ -247,10 +249,12 @@ const LOGO_FILES = import.meta.glob<string>('../assets/images/logos/*.svg', {
 })
 
 function DeploymentsList() {
+  const { copy } = useLanguage()
+
   return (
     <div className="deployments" data-reveal>
       <h3 className="deployments__title" id="deployments-title">
-        IMPLANTAÇÕES REALIZADAS EM
+        {copy.clients.deployments}
       </h3>
       <ul className="deployments__list" aria-labelledby="deployments-title">
         {DEPLOYMENT_COMPANIES.map(({ id, name }) => {
@@ -304,6 +308,7 @@ function ConnectivityNetwork() {
 }
 
 function Contact() {
+  const { copy } = useLanguage()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(
     null,
@@ -330,42 +335,41 @@ function Contact() {
     } catch {
       setFeedback({
         type: 'error',
-        message:
-          'Não foi possível conectar ao serviço de envio. Verifique sua conexão e tente novamente, ou use o e-mail público informado na página.',
+        message: copy.contact.networkError,
       })
       setIsSubmitting(false)
       return
     }
 
     if (!response.ok) {
-      setFeedback({ type: 'error', message: await readFormspreeError(response) })
+      setFeedback({
+        type: 'error',
+        message: await readFormspreeError(response, copy.contact.sendError),
+      })
       setIsSubmitting(false)
       return
     }
 
     form.reset()
-    setFeedback({ type: 'success', message: 'Mensagem enviada. Agradecemos o contato.' })
+    setFeedback({ type: 'success', message: copy.contact.success })
     setIsSubmitting(false)
   }
 
   return (
     <section id="contato" className="contact" aria-labelledby="contact-title">
-      <SectionLabel>Contato / Próximo passo</SectionLabel>
+      <SectionLabel>{copy.contact.eyebrow}</SectionLabel>
       <h2 id="contact-title" className="contact__title" data-contact-title>
-        <span data-contact-line>VAMOS CONECTAR</span>
-        <span data-contact-line>SUA OPERAÇÃO</span>
-        <span data-contact-line>AO PRÓXIMO NÍVEL.</span>
+        {copy.contact.title.map((line) => <span key={line} data-contact-line>{line}</span>)}
       </h2>
       <div className="contact__bottom" data-reveal>
         <p>
-          Converse com nossos especialistas e descubra como a JT Tecnologia pode contribuir para a
-          evolução da sua operação logística.
+          {copy.contact.lead}
         </p>
       </div>
       <form className="contact__form" onSubmit={handleSubmit}>
         <div className="contact__fields">
           <label className="contact__field">
-            <span>SEU NOME</span>
+            <span>{copy.contact.name}</span>
             <input
               autoComplete="name"
               maxLength={120}
@@ -375,7 +379,7 @@ function Contact() {
             />
           </label>
           <label className="contact__field">
-            <span>SEU E-MAIL</span>
+            <span>{copy.contact.email}</span>
             <input
               autoComplete="email"
               maxLength={254}
@@ -385,11 +389,11 @@ function Contact() {
             />
           </label>
           <label className="contact__field contact__field--message">
-            <span>COMO PODEMOS AJUDAR?</span>
+            <span>{copy.contact.message}</span>
             <textarea maxLength={5000} name="message" required rows={4} />
           </label>
           <label className="contact__honeypot" aria-hidden="true">
-            <span>Não preencha este campo</span>
+            <span>{copy.contact.honeypot}</span>
             <input
               autoComplete="off"
               name="_gotcha"
@@ -400,7 +404,7 @@ function Contact() {
         </div>
         <div className="contact__submit-row">
           <button className="contact__link contact__submit" disabled={isSubmitting} type="submit">
-            <span>{isSubmitting ? 'ENVIANDO…' : 'ENVIAR MENSAGEM'}</span>
+            <span>{isSubmitting ? copy.contact.submitting : copy.contact.submit}</span>
             <span aria-hidden="true">↗</span>
           </button>
           {feedback && (

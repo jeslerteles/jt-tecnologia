@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { HERO_ACTS } from '../lib/content'
 import type { HeroAct } from '../lib/content'
+import { useLanguage } from '../lib/useLanguage'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -91,36 +92,41 @@ function SceneLayer({
 }
 
 function ActCopy({ act, heading: Heading }: { act: HeroAct; heading: 'h1' | 'h2' }) {
+  const { copy } = useLanguage()
+  const actIndex = { physical: 0, integration: 1, intelligence: 2, solution: 3 }[act.id]
+  const localizedAct = copy.hero.acts[actIndex]
+
   return (
     <>
       <p className="act__kicker" data-intro>
         <span className="act__index">{act.index}</span>
-        {act.kicker}
+        {localizedAct.kicker}
       </p>
       <Heading className="act__title" data-intro>
-        {act.title}
+        {localizedAct.title}
       </Heading>
       <p className="act__text" data-intro>
-        {act.text}
+        {localizedAct.text}
       </p>
-      {act.secondary && (
+      {localizedAct.secondary && (
         <p className="act__secondary" data-intro>
-          {act.secondary}
+          {localizedAct.secondary}
         </p>
       )}
     </>
   )
 }
 
-const HERO_METRICS = [
-  { value: '16+', label: 'anos de experiência em WMS' },
-  { value: '100%', label: 'foco em multinacionais' },
-] as const
-
 function HeroMetrics() {
+  const { copy } = useLanguage()
+  const metrics = [
+    { value: '16+', label: copy.hero.metrics[0] },
+    { value: '100%', label: copy.hero.metrics[1] },
+  ]
+
   return (
     <dl className="act__metrics" data-intro>
-      {HERO_METRICS.map(({ value, label }) => (
+      {metrics.map(({ value, label }) => (
         <div key={value} className="act__metric">
           <dt>{value}</dt>
           <dd>{label}</dd>
@@ -131,15 +137,18 @@ function HeroMetrics() {
 }
 
 function SolutionsLink({ onFocus }: { onFocus?: (event: FocusEvent<HTMLAnchorElement>) => void }) {
+  const { copy } = useLanguage()
+
   return (
     <a className="act__cta" href={SOLUTIONS_HREF} onFocus={onFocus}>
-      Conheça nossas soluções
+      {copy.hero.solutionsLink}
       <span className="act__cta-line" aria-hidden="true" />
     </a>
   )
 }
 
 function CinematicHero() {
+  const { copy } = useLanguage()
   const track = useRef<HTMLElement>(null)
   const progress = useRef(0)
   const [paused, setPaused] = useState(false)
@@ -225,7 +234,7 @@ function CinematicHero() {
               {act.id === 'physical' && (
                 <p className="act__cue" aria-hidden="true" data-intro>
                   <span className="act__cue-line" />
-                  Role para explorar
+                  {copy.hero.scrollCue}
                 </p>
               )}
             </div>

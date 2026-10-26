@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { NAV_ITEMS } from '../../lib/content'
+import { useLanguage } from '../../lib/useLanguage'
 
 const SCROLLED_AT = 48
 
 function Header() {
+  const { language, setLanguage, copy } = useLanguage()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -38,23 +40,37 @@ function Header() {
         className="site-header__toggle"
         aria-expanded={open}
         aria-controls="site-nav"
-        aria-label={open ? 'Fechar menu' : 'Abrir menu'}
+        aria-label={open ? copy.header.menuClose : copy.header.menuOpen}
         onClick={() => setOpen((value) => !value)}
       >
         {open ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
       </button>
 
-      <nav id="site-nav" className="site-header__nav" aria-label="Principal">
+      <nav id="site-nav" className="site-header__nav" aria-label={copy.header.navLabel}>
         <ul>
-          {NAV_ITEMS.map((item) => (
+          {NAV_ITEMS.map((item, index) => (
             <li key={item.href}>
               <a href={item.href} onClick={() => setOpen(false)}>
-                {item.label}
-              </a>
+                  {copy.nav[index]}
+                </a>
             </li>
           ))}
         </ul>
       </nav>
+
+      <div className="language-switch" role="group" aria-label={copy.header.languageLabel}>
+        {(['en', 'es', 'pt'] as const).map((option) => (
+          <button
+            key={option}
+            type="button"
+            aria-label={option === 'en' ? 'English' : option === 'es' ? 'Español' : 'Português do Brasil'}
+            aria-pressed={language === option}
+            onClick={() => setLanguage(option)}
+          >
+            {option.toUpperCase()}
+          </button>
+        ))}
+      </div>
     </header>
   )
 }

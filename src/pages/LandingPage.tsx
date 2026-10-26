@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Footer from '../components/layout/Footer'
 import Header from '../components/layout/Header'
 import { useReducedMotion } from '../hooks/useReducedMotion'
+import { useLanguage } from '../lib/useLanguage'
 import Hero from '../sections/Hero'
 import InstitutionalSections from '../sections/InstitutionalSections'
 import Solutions from '../sections/Solutions'
@@ -15,6 +16,7 @@ gsap.registerPlugin(ScrollTrigger)
 function LandingPage() {
   const main = useRef<HTMLElement>(null)
   const reducedMotion = useReducedMotion()
+  const { copy } = useLanguage()
 
   useLayoutEffect(() => {
     const element = main.current
@@ -109,7 +111,7 @@ function LandingPage() {
   return (
     <>
       <a className="skip-link" href="#servicos">
-        Pular para o conteúdo
+        {copy.skipLink}
       </a>
       <Header />
       <main ref={main}>
